@@ -12,7 +12,7 @@ import {changeAlertColor, changeAlertVisibility, changeMessage} from "@/store/sl
  */
 export default function LoginForm() {
   const router = useRouter();
-  const [ email, setEmail ] = useState('');
+  const [ username, setUsername ] = useState('');
   const [ password, setPassword ] = useState('');
   const dispatch = useDispatch();
 
@@ -33,7 +33,7 @@ export default function LoginForm() {
     event.preventDefault();
     const authService = new AuthService();
     const response = await authService.processLogin({
-      email: email,
+      username: username,
       password: password
     });
 
@@ -66,12 +66,12 @@ export default function LoginForm() {
         <div className="mb-6">
           <Input
             required
-            id="email"
+            id="username"
             type="text"
-            value={email}
+            value={username}
             label="Your Email"
             size="lg"
-            onChange={ (e: React.FormEvent<HTMLInputElement>) => setEmail(e.currentTarget.value) }
+            onChange={ (e: React.FormEvent<HTMLInputElement>) => setUsername(e.currentTarget.value) }
           />
         </div>
 

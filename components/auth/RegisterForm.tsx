@@ -14,6 +14,7 @@ import {changeAlertColor, changeAlertVisibility, changeMessage} from "@/store/sl
 export default function RegisterForm() {
   const router = useRouter();
   const [ name, setName ] = useState('');
+  const [ username, setUsername ] = useState('');
   const [ email, setEmail ] = useState('');
   const [ password, setPassword ] = useState('');
   const [ retypePassword, setRetypePassword ] = useState('');
@@ -29,6 +30,7 @@ export default function RegisterForm() {
     const userService = new UserService();
     const response = await userService.processRegistration({
       name: name,
+      username: username,
       email: email,
       password: password,
       retypePassword: retypePassword
@@ -74,6 +76,18 @@ export default function RegisterForm() {
             label="Your Name"
             size="lg"
             onChange={ (e) => setName(e.target.value) }
+          />
+        </div>
+
+        <div className="mb-6">
+          <Input
+            required
+            id="register__username"
+            type="text"
+            value={username}
+            label="Your Username"
+            size="lg"
+            onChange={ (e) => setUsername(e.target.value) }
           />
         </div>
 

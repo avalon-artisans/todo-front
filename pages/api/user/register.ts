@@ -21,19 +21,6 @@ export default function handler(request: NextApiRequest, response: NextApiRespon
     return;
   }
 
-  const validationResponse = validateRequestFormData(requestBody);
-  if (!validationResponse.success) {
-    response
-      .status(HttpStatusCode.BadRequest)
-      .json({
-        errors: {
-          title: 'Invalid Request.',
-          detail: validationResponse.message as string
-        },
-      });
-    return;
-  }
-
   response
     .status(HttpStatusCode.Created)
     .json({ data: 'OK' });
@@ -46,13 +33,4 @@ export default function handler(request: NextApiRequest, response: NextApiRespon
  */
 function isRequestMethodValid(requestMethod: string|undefined): boolean {
   return requestMethod === 'POST';
-}
-
-/**
- * Validates if the request form data is valid
- * @param {object} formData
- * @returns {{success: boolean, message: string|null}}
- */
-function validateRequestFormData(formData: object): {success: boolean, message: string|null} {
-  return { success: true, message: null };
 }

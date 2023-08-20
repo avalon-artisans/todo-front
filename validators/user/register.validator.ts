@@ -34,6 +34,17 @@ export default class RegisterValidator extends BaseValidator {
         'string.min': 'Name must have a minimum of 1 character.',
         'string.max': 'Name must not have more than 100 characters.',
       }),
+    username: Joi
+      .string()
+      .required()
+      .min(1)
+      .max(20)
+      .messages({
+        'any.required': 'Username is required.',
+        'string.base': 'Username must be a text.',
+        'string.min': 'Username must have a minimum of 1 character.',
+        'string.max': 'Username must not have more than 20 characters.',
+      }),
     email: Joi
       .string()
       .email({ tlds: { allow: false } })
