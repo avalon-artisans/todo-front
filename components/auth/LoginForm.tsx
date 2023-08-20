@@ -69,7 +69,7 @@ export default function LoginForm() {
             id="username"
             type="text"
             value={username}
-            label="Your Email"
+            label="Your Username"
             size="lg"
             onChange={ (e: React.FormEvent<HTMLInputElement>) => setUsername(e.currentTarget.value) }
           />

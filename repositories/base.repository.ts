@@ -17,6 +17,24 @@ export default class BaseRepository {
   }
 
   /**
+   * Sends a login request to Parse server
+   * @param   {{username: string, password: string}} credentials
+   * @returns {Promise<any>}
+   */
+  async login(credentials: { username: string, password: string }): Promise<any> {
+    const url = this.serverUrl + '/login';
+    return fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Parse-Application-Id': this.applicationId,
+        'X-Parse-REST-API-Key': this.restApiKey
+      },
+      body: JSON.stringify(credentials),
+    });
+  }
+
+  /**
    * Requests a post endpoint to Parse Server
    * @param   {Record<string, any>} data
    * @returns {Promise<any>}}
