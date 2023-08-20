@@ -1,11 +1,12 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import type { ErrorResponseData, SuccessResponseData } from '@/types';
 import { HttpStatusCode } from 'axios';
+import UserRepository from "@/repositories/user.repository";
 
 /**
  * Register API route
  */
-export default function handler(request: NextApiRequest, response: NextApiResponse<SuccessResponseData|ErrorResponseData>) {
+export default async function handler(request: NextApiRequest, response: NextApiResponse<SuccessResponseData|ErrorResponseData>) {
   const requestBody = request.body;
   const requestMethod = request.method;
 
@@ -18,6 +19,21 @@ export default function handler(request: NextApiRequest, response: NextApiRespon
           detail: 'HTTP method not supported.',
         },
       });
+    return;
+  }
+
+  const userRepository = new UserRepository();
+  const apiResponse = await userRepository.register(requestBody);
+  if (!apiResponse.success) {
+    const responseData: ErrorResponseData = {
+      errors: {
+        title: 'User register error.',
+        detail: apiResponse.message,
+      }
+    };
+    response
+      .status(apiResponse.code)
+      .json(responseData);
     return;
   }
 
