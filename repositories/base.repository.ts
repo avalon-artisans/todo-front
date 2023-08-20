@@ -1,4 +1,5 @@
 import { parseServerConfig } from '@/providers/parse-server.provider';
+import axios from 'axios';
 
 /**
  * BaseRepository class
@@ -23,14 +24,14 @@ export default class BaseRepository {
    */
   async login(credentials: { username: string, password: string }): Promise<any> {
     const url = this.serverUrl + '/login';
-    return fetch(url, {
+    return axios.post(url, credentials, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'X-Parse-Application-Id': this.applicationId,
-        'X-Parse-REST-API-Key': this.restApiKey
+        'X-Parse-REST-API-Key': this.restApiKey,
+        'X-Parse-Revocable-Session': '1',
       },
-      body: JSON.stringify(credentials),
     });
   }
 
@@ -41,14 +42,13 @@ export default class BaseRepository {
    */
   async post(data: Record<string, any>): Promise<any> {
     const url = this.serverUrl + '/classes/' + this.class;
-    return fetch(url, {
+    return axios.post(url, data, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'X-Parse-Application-Id': this.applicationId,
         'X-Parse-REST-API-Key': this.restApiKey
       },
-      body: JSON.stringify(data),
     });
   }
 }
