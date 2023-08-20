@@ -10,7 +10,7 @@ type ParseUserFormData = Omit<RegisterFormData, 'retypePassword'>;
 export default class UserRepository extends BaseRepository {
   constructor() {
     super();
-    this.class = 'Todo';
+    this.class = '_User';
   }
 
   /**
@@ -30,7 +30,7 @@ export default class UserRepository extends BaseRepository {
 
     return {
       success: false,
-      code: response.statusCode,
+      code: response.status,
       message: response.message,
     };
   }
