@@ -65,7 +65,6 @@ async function handler(request: NextApiRequest, response: NextApiResponse<LoginR
     return;
   }
 
-  // todo: implement this
   const authRepository = new AuthRepository();
   const apiResponse = await authRepository.loginUser(requestBody);
 
@@ -103,5 +102,5 @@ function isValidPostRequest(requestMethod: string|undefined): boolean {
  * @param requestBody
  */
 function isValidRequestBody(requestBody: any): boolean {
-  return !(!requestBody.email || !requestBody.password);
+  return !(!requestBody.username || !requestBody.password);
 }
