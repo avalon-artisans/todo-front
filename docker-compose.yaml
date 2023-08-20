@@ -1,0 +1,14 @@
+version: '3.8'
+services:
+  web:
+    container_name: wallet-front
+    hostname: wallet-front
+    build:
+      context: .
+      dockerfile: Dockerfile
+    networks:
+      - caddy
+
+networks:
+  caddy:
+    external: true
