@@ -1,12 +1,21 @@
+enum TodoStatus {
+  TODO = 'todo',
+  DOING = 'doing',
+  DONE = 'done',
+};
+
 /**
  * TodoItem structure
  */
 interface TodoItem {
-  id: number;
+  objectId: number;
   title: string;
   description?: string|null;
-  due?: string|null;
-  isDone: boolean;
+  status: TodoStatus;
+  createdAt: string;
+  updatedAt: string;
+  user: any;
+  parent?: string|null;
 }
 
-export type { TodoItem };
+export type { TodoItem, TodoStatus };
