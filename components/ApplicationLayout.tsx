@@ -29,6 +29,12 @@ interface ApplicationLayoutProps {
   user?: UserSession;
 }
 
+interface SidebarListItem {
+  onClick: Function;
+  icon: React.ReactNode;
+  title: string;
+}
+
 /**
  * ApplicationLayout component
  * @author Kenneth Sumang
@@ -43,6 +49,19 @@ export default function ApplicationLayout(props: ApplicationLayoutProps) {
     className:
       "absolute top-2/4 -left-2/4 -translate-y-2/4 -translate-x-3/4 font-normal",
   };
+
+  const sidebarListItems: SidebarListItem[] = [
+    {
+      title: 'Dashboard',
+      icon: <PresentationChartBarIcon className="h-5" />,
+      onClick: () => () => router.push('/dashboard'),
+    },
+    {
+      title: 'Log Out',
+      icon: <PowerIcon className="h-5 w-5" />,
+      onClick: () => handleLogoutButtonClick(),
+    },
+  ];
 
   async function handleLogoutButtonClick() {
     const authService = new AuthService();
@@ -84,19 +103,16 @@ export default function ApplicationLayout(props: ApplicationLayoutProps) {
         </div>
         <hr />
         <List className="h-full">
-          <ListItem onClick={() => router.push('/dashboard')}>
-            <ListItemPrefix>
-              <PresentationChartBarIcon className="h-5" />
-            </ListItemPrefix>
-            Dashboard
-          </ListItem>
-
-          <ListItem onClick={() => handleLogoutButtonClick()}>
-            <ListItemPrefix>
-              <PowerIcon className="h-5 w-5" />
-            </ListItemPrefix>
-            Log Out
-          </ListItem>
+          {
+            sidebarListItems.map((item: SidebarListItem) => {
+              return (
+                <ListItem onClick={() => item.onClick()} key={item.title}>
+                  <ListItemPrefix>{item.icon}</ListItemPrefix>
+                  {item.title}
+                </ListItem>
+              );
+            })
+          }
         </List>
       </Drawer>
         <div className="absolute bottom-5 right-5">
