@@ -3,7 +3,7 @@ import AuthService from '@/services/auth.service';
 import { useRouter } from 'next/router';
 import { Button, Input, Typography } from '@material-tailwind/react';
 import { useDispatch } from 'react-redux';
-import {changeAlertColor, changeAlertVisibility, changeMessage} from "@/store/slices/alertSlice";
+import {changeAlertColor, changeAlertVisibility, changeMessage} from '@/store/slices/alertSlice';
 
 /**
  * LoginForm component
@@ -32,18 +32,24 @@ export default function LoginForm() {
   async function handleLoginFormSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const authService = new AuthService();
-    const response = await authService.processLogin({
-      username: username,
-      password: password
-    });
+    try {
+      const response = await authService.processLogin({
+        username: username,
+        password: password
+      });
 
-    if (response.success) {
-      return redirectToDashboard();
+      if (response.success) {
+        return redirectToDashboard();
+      }
+
+      dispatch(changeMessage(response.message));
+      dispatch(changeAlertColor('red'));
+      dispatch(changeAlertVisibility(true));
+    } catch (error) {
+      dispatch(changeMessage('The credentials you entered does not match our records.'));
+      dispatch(changeAlertColor('red'));
+      dispatch(changeAlertVisibility(true));
     }
-
-    dispatch(changeMessage(response.message));
-    dispatch(changeAlertColor('red'));
-    dispatch(changeAlertVisibility(true));
   }
 
   /**

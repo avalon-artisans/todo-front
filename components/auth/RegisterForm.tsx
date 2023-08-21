@@ -28,25 +28,31 @@ export default function RegisterForm() {
   async function handleRegisterFormSubmit(event: React.FormEvent<HTMLFormElement>): Promise<any> {
     event.preventDefault();
     const userService = new UserService();
-    const response = await userService.processRegistration({
-      name: name,
-      username: username,
-      email: email,
-      password: password,
-      retypePassword: retypePassword
-    });
+    try {
+      const response = await userService.processRegistration({
+        name: name,
+        username: username,
+        email: email,
+        password: password,
+        retypePassword: retypePassword
+      });
 
-    if (response.success) {
-      dispatch(changeMessage('Registered successfully. Please login to continue.'));
+      if (response.success) {
+        dispatch(changeMessage('Registered successfully. Please login to continue.'));
+        dispatch(changeAlertVisibility(true));
+        dispatch(changeAlertColor('green'));
+        return;
+      }
+
+      dispatch(changeMessage(response.message));
       dispatch(changeAlertVisibility(true));
-      dispatch(changeAlertColor('green'));
+      dispatch(changeAlertColor('red'));
       return;
+    } catch (error) {
+      dispatch(changeMessage('An unexpected error has occurred.'));
+      dispatch(changeAlertVisibility(true));
+      dispatch(changeAlertColor('red'));
     }
-
-    dispatch(changeMessage(response.message));
-    dispatch(changeAlertVisibility(true));
-    dispatch(changeAlertColor('red'));
-    return;
   }
 
   /**
