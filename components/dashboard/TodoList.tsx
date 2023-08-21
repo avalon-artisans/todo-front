@@ -23,6 +23,7 @@ export default function TodoList({ items }: TodoListProps) {
                 <Checkbox
                   checked={todoItem.isDone}
                   containerProps={{ className: 'p-0' }}
+                  onChange={() => {}}
                 />
               </ListItemPrefix>
               {todoItem.title}
