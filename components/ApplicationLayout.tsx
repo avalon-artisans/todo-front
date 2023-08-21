@@ -10,22 +10,32 @@ import {
   SpeedDialHandler,
   IconButton,
   SpeedDialContent,
-  SpeedDialAction
+  SpeedDialAction,
 } from '@material-tailwind/react';
 import {
   Bars3Icon,
   UserCircleIcon,
   PresentationChartBarIcon,
-  HomeIcon
+  HomeIcon,
+  PowerIcon,
 } from '@heroicons/react/24/solid';
-import {PlusIcon} from "@heroicons/react/20/solid";
+import { PlusIcon } from '@heroicons/react/20/solid';
+import AuthService from '@/services/auth.service';
+import { useRouter } from 'next/router';
+import {UserSession} from "@/types/auth";
+
+interface ApplicationLayoutProps {
+  children: React.ReactNode;
+  user?: UserSession;
+}
 
 /**
  * ApplicationLayout component
  * @author Kenneth Sumang
  */
-export default function ApplicationLayout({ children }: React.PropsWithChildren) {
+export default function ApplicationLayout(props: ApplicationLayoutProps) {
   const [ isDrawerOpen, setDrawerOpen ] = useState(false);
+  const router = useRouter();
 
   const labelProps = {
     variant: "small",
@@ -33,6 +43,12 @@ export default function ApplicationLayout({ children }: React.PropsWithChildren)
     className:
       "absolute top-2/4 -left-2/4 -translate-y-2/4 -translate-x-3/4 font-normal",
   };
+
+  async function handleLogoutButtonClick() {
+    const authService = new AuthService();
+    await authService.processLogout();
+    return router.push('/');
+  }
 
   return (
     <>
@@ -61,18 +77,25 @@ export default function ApplicationLayout({ children }: React.PropsWithChildren)
           <div className="mx-5 flex flex-row">
             <UserCircleIcon className="h-12" />
             <div className="flex flex-col justify-items-center ml-3">
-              <span>Example User</span>
-              <small>admin@example.com</small>
+              <span>{props.user?.name}</span>
+              <small>{props.user?.email}</small>
             </div>
           </div>
         </div>
         <hr />
-        <List>
-          <ListItem>
+        <List className="h-full">
+          <ListItem onClick={() => router.push('/dashboard')}>
             <ListItemPrefix>
               <PresentationChartBarIcon className="h-5" />
             </ListItemPrefix>
             Dashboard
+          </ListItem>
+
+          <ListItem onClick={() => handleLogoutButtonClick()}>
+            <ListItemPrefix>
+              <PowerIcon className="h-5 w-5" />
+            </ListItemPrefix>
+            Log Out
           </ListItem>
         </List>
       </Drawer>
@@ -92,7 +115,7 @@ export default function ApplicationLayout({ children }: React.PropsWithChildren)
           </SpeedDial>
         </div>
       <div className="m-5">
-        { children }
+        { props.children }
       </div>
     </>
   );

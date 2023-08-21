@@ -41,6 +41,20 @@ export default  class AuthService {
   };
 
   /**
+   * Logs out user
+   * @returns {Promise<any>}
+   */
+  async processLogout(): Promise<any> {
+    return axios({
+      method: 'POST',
+      url: '/api/auth/logout',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+  }
+
+  /**
    * Checks if credentials are valid
    * @param   {any} credentials
    * @returns {boolean}
