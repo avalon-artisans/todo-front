@@ -15,13 +15,7 @@ interface UserLoginData {
   updatedAt: string;
   objectId: string;
   sessionToken: string;
-}
-
-/**
- * LoginResponseData structure
- */
-interface LoginResponseData extends ResponseData {
-  data?: UserLoginData
+  ACL: Record<string, object>;
 }
 
 /**
@@ -37,12 +31,12 @@ export default withIronSessionApiRoute(
  * @param request
  * @param response
  */
-async function handler(request: NextApiRequest, response: NextApiResponse<LoginResponseData|ErrorResponseData>) {
+async function handler(request: NextApiRequest, response: NextApiResponse<UserLoginData|ErrorResponseData>) {
   const requestBody = request.body;
   const requestMethod = request.method;
 
   if (!isValidPostRequest(requestMethod)) {
-    response
+    return response
       .status(404)
       .json({
         errors: {
@@ -50,11 +44,10 @@ async function handler(request: NextApiRequest, response: NextApiResponse<LoginR
           detail: 'HTTP method not supported.',
         },
       });
-    return;
   }
 
   if (!isValidRequestBody(requestBody)) {
-    response
+    return response
       .status(400)
       .json({
         errors: {
@@ -62,14 +55,13 @@ async function handler(request: NextApiRequest, response: NextApiResponse<LoginR
           detail: 'Data is invalid.',
         },
       });
-    return;
   }
 
   const authRepository = new AuthRepository();
   const apiResponse = await authRepository.loginUser(requestBody);
 
   if (!apiResponse.success) {
-    response
+    return response
       .status(401)
       .json({
         errors: {
@@ -77,12 +69,11 @@ async function handler(request: NextApiRequest, response: NextApiResponse<LoginR
           detail: apiResponse.message,
         },
       });
-    return;
   }
-  const responseData: LoginResponseData = apiResponse.data as LoginResponseData;
-  request.session.user = responseData.data;
+  const responseData = apiResponse.data as UserLoginData;
+  request.session.user = responseData;
   await request.session.save();
-  response.status(200).json(responseData);
+  return response.status(200).json(responseData);
 }
 
 /**

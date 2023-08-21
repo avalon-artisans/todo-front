@@ -16,6 +16,7 @@ interface UserSession {
   sessionToken: string;
   createdAt: string;
   updatedAt: string;
+  ACL: Record<string, object>;
 }
 
 export type {
