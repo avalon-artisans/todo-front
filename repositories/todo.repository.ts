@@ -1,4 +1,5 @@
 import BaseRepository from '@/repositories/base.repository';
+import type { RepositoryResponse } from '@/types';
 
 export default class TodoRepository extends BaseRepository {
   constructor() {
@@ -6,12 +7,32 @@ export default class TodoRepository extends BaseRepository {
     this.class = 'Todo';
   }
 
+  async fetchAllTodos(sessionToken?: string): Promise<RepositoryResponse> {
+    const response = await this.fetchAll(sessionToken);
+    console.log(response.data);
+    if (response.status === 200) {
+      return {
+        success: true,
+        code: 200,
+        message: 'Successfully fetched.',
+        data: response.data.results,
+      };
+    }
+
+    return {
+      success: false,
+      code: response.status,
+      message: response.message,
+    };
+  }
+
   /**
    * Creates a new todo
-   * @param formData
+   * @param {Record<string, any> } formData
+   * @param {string}               sessionToken
    */
-  async create(formData: Record<string, any>): Promise<{ success: boolean, code: number, message: string, data?: Record<string, any> }> {
-    const response = await this.post(formData);
+  async create(formData: Record<string, any>, sessionToken?: string): Promise<RepositoryResponse> {
+    const response = await this.post(formData, sessionToken);
     if (response.statusCode === 201) {
       return {
         success: true,

@@ -16,6 +16,8 @@ interface TodoItem {
   updatedAt: string;
   user: any;
   parent?: string|null;
+  due_date?: string|null;
 }
 
-export type { TodoItem, TodoStatus };
+export type { TodoItem };
+export { TodoStatus };

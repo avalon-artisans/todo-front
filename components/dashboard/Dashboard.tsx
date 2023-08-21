@@ -4,7 +4,7 @@ import {TodoItem} from '@/types/todo';
 import {Typography} from '@material-tailwind/react';
 import TodoList from '@/components/dashboard/TodoList';
 import { useDispatch } from 'react-redux';
-import {changeAlertColor, changeAlertVisibility, changeMessage} from "@/store/slices/alertSlice";
+import { changeAlertColor, changeAlertVisibility, changeMessage } from "@/store/slices/alertSlice";
 import _ from 'lodash';
 import dayjs from 'dayjs';
 
@@ -49,8 +49,8 @@ export default function Dashboard() {
 
   function filterItemsDueToday(): TodoItem[] {
     return _.filter(todoItems, (item) => {
-      if (item.due !== null) {
-        return item.due!.includes(dayjs().utc().format('YYYY-MM-DD'));
+      if (item.due_date && item.due_date.length > 0) {
+        return item.due_date!.includes(dayjs().utc().format('YYYY-MM-DD'));
       }
       return false;
     });
@@ -58,11 +58,11 @@ export default function Dashboard() {
 
   function filterItemsNotDueToday() {
     return _.filter(todoItems, (item) => {
-      if (item.due === null) {
+      if (!item.due_date || item.due_date.length === 0) {
         return true;
       }
 
-      return !item.due?.includes(dayjs().utc().format('YYYY-MM-DD'));
+      return !item.due_date?.includes(dayjs().utc().format('YYYY-MM-DD'));
     });
   }
 

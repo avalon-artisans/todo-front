@@ -27,9 +27,16 @@ interface ErrorData {
   detail: string;
 }
 
+interface RepositoryResponse {
+  success: boolean;
+  code: number;
+  message: string;
+  data?: Record<string, any>;
+}
 
 export type {
   ResponseData,
   SuccessResponseData,
-  ErrorResponseData
+  ErrorResponseData,
+  RepositoryResponse,
 };

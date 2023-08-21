@@ -1,5 +1,5 @@
-import { TodoItem } from '@/types/todo';
-import {Checkbox, List, ListItem, ListItemPrefix} from "@material-tailwind/react";
+import { TodoItem, TodoStatus } from '@/types/todo';
+import {Checkbox, List, ListItem, ListItemPrefix} from '@material-tailwind/react';
 
 /**
  * TodoListProps structure
@@ -16,12 +16,12 @@ export default function TodoList({ items }: TodoListProps) {
           return (
             <ListItem
               className="group font-normal py-1 leading-none"
-              key={todoItem.id}
+              key={todoItem.objectId}
               ripple={false}
             >
               <ListItemPrefix>
                 <Checkbox
-                  checked={todoItem.isDone}
+                  checked={todoItem.status === TodoStatus.DONE}
                   containerProps={{ className: 'p-0' }}
                   onChange={() => {}}
                 />

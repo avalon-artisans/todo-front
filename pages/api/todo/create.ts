@@ -37,7 +37,7 @@ async function handler(request: NextApiRequest, response: NextApiResponse) {
   }
 
   const todoRepository = new TodoRepository();
-  const apiResponse = await todoRepository.create(requestBody);
+  const apiResponse = await todoRepository.create(requestBody, user.sessionToken);
 
   if (!apiResponse.success) {
     return response
