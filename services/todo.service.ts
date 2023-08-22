@@ -13,7 +13,7 @@ export default class TodoService {
    * @returns {Promise<TodoItem[]>}
    */
   async fetchTodos(): Promise<{ success: boolean; data: TodoItem[]; message: string }> {
-    const response = await this.requestFetchTodos();
+    const response = await this.requestFetchAllTodos();
     if (response.status !== HttpStatusCode.Ok) {
       const errorResponse = response as AxiosResponse<ErrorResponseData>;
       return {
@@ -86,10 +86,10 @@ export default class TodoService {
    * Requests fetching of todos in API
    * @returns {Promise<AxiosResponse<SuccessResponseData|ErrorResponseData>>}
    */
-  async requestFetchTodos(): Promise<AxiosResponse<SuccessResponseData|ErrorResponseData>> {
+  async requestFetchAllTodos(): Promise<AxiosResponse<SuccessResponseData|ErrorResponseData>> {
     return axios({
       method: 'GET',
-      url: '/api/todo/fetch',
+      url: '/api/todo/all',
       headers: {
         'Content-Type': 'application/json',
       }
