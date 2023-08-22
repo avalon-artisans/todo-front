@@ -26,7 +26,9 @@ export default function TodoList({ items }: TodoListProps) {
                   onChange={() => {}}
                 />
               </ListItemPrefix>
-              {todoItem.title}
+              <a href={`/todo/${todoItem.objectId}`}>
+                {todoItem.title}
+              </a>
             </ListItem>
           );
         })

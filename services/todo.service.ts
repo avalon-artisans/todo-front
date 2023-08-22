@@ -9,6 +9,29 @@ import CreateTodoValidator from "@/validators/todo/create.validator";
  */
 export default class TodoService {
   /**
+   * Fetch specific todo
+   * @param   {string} objectId
+   * @returns {Promise<{ success: boolean; data?: TodoItem; message: string }>}
+   */
+  async fetchSpecificTodo(objectId: string): Promise<{ success: boolean; data?: TodoItem; message: string }> {
+    const apiResponse = await this.requestFetchSpecificTodo(objectId);
+    if (apiResponse.status !== HttpStatusCode.Ok) {
+      const errorResponse = apiResponse as AxiosResponse<ErrorResponseData>;
+      return {
+        success: false,
+        message: errorResponse.data.errors.detail,
+      };
+    }
+
+    const successResponse = apiResponse as AxiosResponse<SuccessResponseData>;
+    return {
+      success: true,
+      message: 'Fetch successful.',
+      data: successResponse.data.data,
+    };
+  }
+
+  /**
    * Fetches todos
    * @returns {Promise<TodoItem[]>}
    */
@@ -26,7 +49,7 @@ export default class TodoService {
     const successResponse = response as AxiosResponse<SuccessResponseData>;
     return {
       success: true,
-      message: 'Login successful.',
+      message: 'Fetch successful.',
       data: successResponse.data.data,
     };
   }
@@ -80,6 +103,20 @@ export default class TodoService {
     }
 
     return { success: true, message: '' };
+  }
+
+  /**
+   * Requests fetching specific todo
+   * @param objectId
+   */
+  async requestFetchSpecificTodo(objectId: string): Promise<AxiosResponse<SuccessResponseData|ErrorResponseData>> {
+    return axios({
+      method: 'GET',
+      url: `${process.env.APP_DOMAIN as string}/api/todo/${objectId}`,
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    });
   }
 
   /**

@@ -7,6 +7,25 @@ export default class TodoRepository extends BaseRepository {
     this.class = 'Todo';
   }
 
+  async fetchSpecificTodo(objectId: string, sessionToken?: string): Promise<RepositoryResponse> {
+    const response = await this.fetchSpecific(objectId, sessionToken);
+
+    if (response.status === 200) {
+      return {
+        success: true,
+        code: 200,
+        message: 'Successfully fetched.',
+        data: response.data,
+      };
+    }
+
+    return {
+      success: false,
+      code: response.status,
+      message: response.message,
+    };
+  }
+
   async fetchAllTodos(sessionToken?: string): Promise<RepositoryResponse> {
     const response = await this.fetchAll(sessionToken);
     if (response.status === 200) {

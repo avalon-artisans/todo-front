@@ -28,7 +28,7 @@ export function withSessionSsr<
 >(
   handler: (
     context: GetServerSidePropsContext,
-  ) => GetServerSidePropsResult<P> | Promise<GetServerSidePropsResult<P>>,
+  ) => any,
 ) {
   return withIronSessionSsr(handler, sessionOptions);
 }
