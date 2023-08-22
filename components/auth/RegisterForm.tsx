@@ -4,7 +4,7 @@ import { Button, Input, Typography } from '@material-tailwind/react';
 import { ArrowLeftIcon } from '@heroicons/react/24/solid';
 import UserService from '@/services/user.service';
 import { useDispatch } from 'react-redux';
-import {changeAlertColor, changeAlertVisibility, changeMessage} from "@/store/slices/alertSlice";
+import { changeAlertColor, changeAlertVisibility, changeMessage } from '@/store/slices/alertSlice';
 
 /**
  * RegisterForm component
