@@ -37,7 +37,19 @@ async function handler(request: NextApiRequest, response: NextApiResponse) {
   }
 
   const todoRepository = new TodoRepository();
-  const apiResponse = await todoRepository.create(requestBody, user.sessionToken);
+  const apiResponse = await todoRepository.create({
+    ...requestBody,
+    'ACL': {
+      'public': {
+        read: false,
+        write: false,
+      },
+      [user.objectId]: {
+        read: true,
+        write: true,
+      }
+    },
+  }, user.sessionToken);
 
   if (!apiResponse.success) {
     return response

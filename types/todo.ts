@@ -19,5 +19,11 @@ interface TodoItem {
   due_date?: string|null;
 }
 
-export type { TodoItem };
+interface TodoFormData {
+  title: string;
+  description?: string|null;
+  due_date?: string|null;
+}
+
+export type { TodoItem, TodoFormData };
 export { TodoStatus };
