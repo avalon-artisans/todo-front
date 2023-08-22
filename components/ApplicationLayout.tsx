@@ -54,7 +54,7 @@ export default function ApplicationLayout(props: ApplicationLayoutProps) {
     {
       title: 'Dashboard',
       icon: <PresentationChartBarIcon className="h-5" />,
-      onClick: () => () => router.push('/dashboard'),
+      onClick: () => router.push('/dashboard'),
     },
     {
       title: 'Log Out',
@@ -118,16 +118,14 @@ export default function ApplicationLayout(props: ApplicationLayoutProps) {
         <div className="absolute bottom-5 right-5">
           <SpeedDial>
             <SpeedDialHandler>
-              <IconButton size="lg" className="rounded-full">
+              <IconButton
+                size="lg"
+                className="rounded-full"
+                onClick={() => router.push('/todo/new')}
+              >
                 <PlusIcon className="h-5 w-5 transition-transform group-hover:rotate-45" />
               </IconButton>
             </SpeedDialHandler>
-            <SpeedDialContent>
-              <SpeedDialAction className="relative">
-                <HomeIcon className="h-5 w-5" />
-                <Typography {...labelProps}>Home</Typography>
-              </SpeedDialAction>
-            </SpeedDialContent>
           </SpeedDial>
         </div>
       <div className="m-5">
