@@ -94,7 +94,7 @@ export default function Dashboard() {
 
   return (
     <>
-      <div className="mb-5">
+      <div>
         <Typography variant="h5" className="mb-1">Overdue</Typography>
         <TodoList items={filterItemsOverdue()} />
       </div>
