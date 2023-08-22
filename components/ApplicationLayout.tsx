@@ -9,14 +9,11 @@ import {
   SpeedDial,
   SpeedDialHandler,
   IconButton,
-  SpeedDialContent,
-  SpeedDialAction,
 } from '@material-tailwind/react';
 import {
   Bars3Icon,
   UserCircleIcon,
   PresentationChartBarIcon,
-  HomeIcon,
   PowerIcon,
 } from '@heroicons/react/24/solid';
 import { PlusIcon } from '@heroicons/react/20/solid';
@@ -49,6 +46,10 @@ export default function ApplicationLayout(props: ApplicationLayoutProps) {
     className:
       "absolute top-2/4 -left-2/4 -translate-y-2/4 -translate-x-3/4 font-normal",
   };
+
+  const routesWithoutCreateIcon: string[] = [
+    '/todo/new',
+  ];
 
   const sidebarListItems: SidebarListItem[] = [
     {
@@ -115,19 +116,24 @@ export default function ApplicationLayout(props: ApplicationLayoutProps) {
           }
         </List>
       </Drawer>
-        <div className="absolute bottom-5 right-5">
-          <SpeedDial>
-            <SpeedDialHandler>
-              <IconButton
-                size="lg"
-                className="rounded-full"
-                onClick={() => router.push('/todo/new')}
-              >
-                <PlusIcon className="h-5 w-5 transition-transform group-hover:rotate-45" />
-              </IconButton>
-            </SpeedDialHandler>
-          </SpeedDial>
-        </div>
+      {
+        (routesWithoutCreateIcon.includes(router.pathname))
+          ? <></>
+          : <div className="absolute bottom-5 right-5">
+            <SpeedDial>
+              <SpeedDialHandler>
+                <IconButton
+                  size="lg"
+                  className="rounded-full"
+                  onClick={() => router.push('/todo/new')}
+                >
+                  <PlusIcon className="h-5 w-5 transition-transform group-hover:rotate-45" />
+                </IconButton>
+              </SpeedDialHandler>
+            </SpeedDial>
+          </div>
+      }
+
       <div className="m-5">
         { props.children }
       </div>
