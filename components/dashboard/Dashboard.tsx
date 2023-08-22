@@ -9,7 +9,9 @@ import _ from 'lodash';
 import dayjs from 'dayjs';
 
 import utc from 'dayjs/plugin/utc';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
 dayjs.extend(utc);
+dayjs.extend(customParseFormat);
 
 /**
  * Dashboard component
@@ -56,25 +58,57 @@ export default function Dashboard() {
     });
   }
 
-  function filterItemsNotDueToday() {
+  function filterItemsOverdue(): TodoItem[] {
     return _.filter(todoItems, (item) => {
       if (!item.due_date || item.due_date.length === 0) {
-        return true;
+        return false;
       }
 
-      return !item.due_date?.includes(dayjs().utc().format('YYYY-MM-DD'));
+      const dueDate = dayjs(item.due_date, 'YYYY-MM-DD HH:mm:ss');
+      const timeNow = dayjs();
+
+      return timeNow.isAfter(dueDate);
+    });
+  }
+
+  function filterItemsUpcoming(): TodoItem[] {
+    return _.filter(todoItems, (item) => {
+      if (!item.due_date || item.due_date.length === 0) {
+        return false;
+      }
+
+      const dueDate = dayjs(item.due_date, 'YYYY-MM-DD HH:mm:ss');
+      const timeNow = dayjs();
+
+      return timeNow.isBefore(dueDate);
+    });
+  }
+
+  function filterNoDue(): TodoItem[] {
+    return _.filter(todoItems, (item) => {
+      return !item.due_date || item.due_date.length === 0;
+
+
     });
   }
 
   return (
     <>
       <div className="mb-5">
+        <Typography variant="h5" className="mb-1">Overdue</Typography>
+        <TodoList items={filterItemsOverdue()} />
+      </div>
+      <div>
         <Typography variant="h5" className="mb-1">Today</Typography>
         <TodoList items={filterItemsDueToday()} />
       </div>
       <div>
         <Typography variant="h5" className="mb-1">Upcoming</Typography>
-        <TodoList items={filterItemsNotDueToday()} />
+        <TodoList items={filterItemsUpcoming()} />
+      </div>
+      <div>
+        <Typography variant="h5" className="mb-1">No Due Date</Typography>
+        <TodoList items={filterNoDue()} />
       </div>
     </>
   );
