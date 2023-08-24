@@ -1,7 +1,8 @@
 import {TodoFormData, TodoItem} from '@/types/todo';
 import axios, {AxiosResponse, HttpStatusCode} from 'axios';
-import {ErrorResponseData, SuccessResponseData} from '@/types';
-import CreateTodoValidator from "@/validators/todo/create.validator";
+import {ErrorResponseData, ServiceResponse, SuccessResponseData} from '@/types';
+import CreateTodoValidator from '@/validators/todo/create.validator';
+import { catchServiceError } from '@/decorators/catch-service-error.decorator';
 
 /**
  * TodoService class
@@ -11,9 +12,10 @@ export default class TodoService {
   /**
    * Fetch specific todo
    * @param   {string} objectId
-   * @returns {Promise<{ success: boolean; data?: TodoItem; message: string }>}
+   * @returns {Promise<ServiceResponse<TodoItem>>}
    */
-  async fetchSpecificTodo(objectId: string): Promise<{ success: boolean; data?: TodoItem; message: string }> {
+  @catchServiceError<TodoItem>()
+  async fetchSpecificTodo(objectId: string): Promise<ServiceResponse<TodoItem>> {
     const apiResponse = await this.requestFetchSpecificTodo(objectId);
     if (apiResponse.status !== HttpStatusCode.Ok) {
       const errorResponse = apiResponse as AxiosResponse<ErrorResponseData>;
@@ -33,9 +35,10 @@ export default class TodoService {
 
   /**
    * Fetches todos
-   * @returns {Promise<TodoItem[]>}
+   * @returns {Promise<ServiceResponse<TodoItem[]>>}
    */
-  async fetchTodos(): Promise<{ success: boolean; data: TodoItem[]; message: string }> {
+  @catchServiceError<TodoItem[]>()
+  async fetchTodos(): Promise<ServiceResponse<TodoItem[]>> {
     const response = await this.requestFetchAllTodos();
     if (response.status !== HttpStatusCode.Ok) {
       const errorResponse = response as AxiosResponse<ErrorResponseData>;
@@ -57,9 +60,10 @@ export default class TodoService {
   /**
    * Creates todo
    * @param   {Record<string, any>} formData
-   * @returns {Promise<{ success: boolean; data?: TodoItem[]; message: string }>}
+   * @returns {Promise<ServiceResponse<TodoItem>>}
    */
-  async processCreateTodo(formData: Record<string, any>): Promise<{ success: boolean; data?: TodoItem; message: string }> {
+  @catchServiceError<TodoItem>()
+  async processCreateTodo(formData: Record<string, any>): Promise<ServiceResponse<TodoItem>> {
     const validationResponse = this.validateFormData(formData);
     if (!validationResponse.success) {
       return {
