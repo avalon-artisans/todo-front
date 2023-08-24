@@ -15,7 +15,7 @@ export default class TodoRepository extends BaseRepository {
    * @returns {Promise<RepositoryResponse>}
    */
   @catchAxiosError()
-  async fetchSpecificTodo(objectId: string, sessionToken?: string): Promise<RepositoryResponse> {
+  async fetchSpecificTodo(objectId: string, sessionToken?: string): Promise<RepositoryResponse<any>> {
     const response = await this.fetchSpecific(objectId, sessionToken);
 
     if (response.status === 200) {
@@ -40,7 +40,7 @@ export default class TodoRepository extends BaseRepository {
    * @returns {Promise<RepositoryResponse>}
    */
   @catchAxiosError()
-  async fetchAllTodos(sessionToken?: string): Promise<RepositoryResponse> {
+  async fetchAllTodos(sessionToken?: string): Promise<RepositoryResponse<any>> {
     const response = await this.fetchAll(sessionToken);
     if (response.status === 200) {
       return {
@@ -64,7 +64,7 @@ export default class TodoRepository extends BaseRepository {
    * @param {string}               sessionToken
    */
   @catchAxiosError()
-  async create(formData: Record<string, any>, sessionToken?: string): Promise<RepositoryResponse> {
+  async create(formData: Record<string, any>, sessionToken?: string): Promise<RepositoryResponse<any>> {
     const response = await this.post(formData, sessionToken);
     if (response.statusCode === 201) {
       return {
