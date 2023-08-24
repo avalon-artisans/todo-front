@@ -1,5 +1,5 @@
-import {RepositoryResponse, ServiceResponse} from '@/types';
-import {AxiosError} from "axios";
+import { RepositoryResponse, ServiceResponse } from '@/types';
+import { AxiosError } from 'axios';
 
 export function catchServiceError<T>() {
   return function (target: any, propertyKey: string, descriptor: PropertyDescriptor) {
@@ -26,7 +26,6 @@ export function catchAxiosError<T>() {
       try {
         return await method.apply(this, args);
       } catch (error) {
-        console.log(error);
         return {
           success: false,
           code: (error as AxiosError).response?.status || 500,
