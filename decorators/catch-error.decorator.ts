@@ -7,7 +7,7 @@ export function catchServiceError<T>() {
 
     descriptor.value = async function (...args: any): Promise<ServiceResponse<T>> {
       try {
-        return await method.apply(target, args);
+        return await method.apply(this, args);
       } catch (error) {
         return {
           success: false,
