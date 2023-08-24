@@ -27,11 +27,11 @@ interface ErrorData {
   detail: string;
 }
 
-interface RepositoryResponse {
+interface RepositoryResponse<T> {
   success: boolean;
   code: number;
   message: string;
-  data?: Record<string, any>;
+  data?: T | Record<string, any>;
   stack?: any;
 }
 
