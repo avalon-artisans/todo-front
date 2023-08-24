@@ -1,5 +1,6 @@
 import BaseRepository from '@/repositories/base.repository';
 import type { RepositoryResponse } from '@/types';
+import {catchAxiosError} from "@/decorators/catch-error.decorator";
 
 export default class TodoRepository extends BaseRepository {
   constructor() {
@@ -7,6 +8,13 @@ export default class TodoRepository extends BaseRepository {
     this.class = 'Todo';
   }
 
+  /**
+   * Fetches specific todo
+   * @param   {string}  objectId
+   * @param   {string?} sessionToken
+   * @returns {Promise<RepositoryResponse>}
+   */
+  @catchAxiosError()
   async fetchSpecificTodo(objectId: string, sessionToken?: string): Promise<RepositoryResponse> {
     const response = await this.fetchSpecific(objectId, sessionToken);
 
@@ -26,6 +34,12 @@ export default class TodoRepository extends BaseRepository {
     };
   }
 
+  /**
+   * Fetches all todos
+   * @param   {string?} sessionToken
+   * @returns {Promise<RepositoryResponse>}
+   */
+  @catchAxiosError()
   async fetchAllTodos(sessionToken?: string): Promise<RepositoryResponse> {
     const response = await this.fetchAll(sessionToken);
     if (response.status === 200) {
@@ -49,6 +63,7 @@ export default class TodoRepository extends BaseRepository {
    * @param {Record<string, any> } formData
    * @param {string}               sessionToken
    */
+  @catchAxiosError()
   async create(formData: Record<string, any>, sessionToken?: string): Promise<RepositoryResponse> {
     const response = await this.post(formData, sessionToken);
     if (response.statusCode === 201) {

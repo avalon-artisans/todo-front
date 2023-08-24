@@ -32,6 +32,7 @@ interface RepositoryResponse {
   code: number;
   message: string;
   data?: Record<string, any>;
+  stack?: any;
 }
 
 interface ServiceResponse<T> {

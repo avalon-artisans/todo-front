@@ -2,7 +2,7 @@ import {TodoFormData, TodoItem} from '@/types/todo';
 import axios, {AxiosResponse, HttpStatusCode} from 'axios';
 import {ErrorResponseData, ServiceResponse, SuccessResponseData} from '@/types';
 import CreateTodoValidator from '@/validators/todo/create.validator';
-import { catchServiceError } from '@/decorators/catch-service-error.decorator';
+import { catchServiceError } from '@/decorators/catch-error.decorator';
 
 /**
  * TodoService class
