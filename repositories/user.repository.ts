@@ -1,5 +1,6 @@
 import BaseRepository from '@/repositories/base.repository';
-import {RegisterFormData} from "@/types/user";
+import { RegisterFormData } from '@/types/user';
+import { catchAxiosError } from '@/decorators/catch-error.decorator';
 
 type ParseUserFormData = Omit<RegisterFormData, 'retypePassword'>;
 
@@ -17,6 +18,7 @@ export default class UserRepository extends BaseRepository {
    * Registers a new user
    * @param formData
    */
+  @catchAxiosError()
   async register(formData: ParseUserFormData): Promise<{ success: boolean, code: number, message: string, data?: Record<string, any> }> {
     const response = await this.post(formData);
     if (response.statusCode === 201) {

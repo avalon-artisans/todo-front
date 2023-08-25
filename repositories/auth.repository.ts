@@ -1,7 +1,16 @@
 import BaseRepository from '@/repositories/base.repository';
+import { RepositoryResponse } from '@/types';
+import type { LoginCredentials } from '@/types/auth';
+import { catchAxiosError } from '@/decorators/catch-error.decorator';
 
 export default class AuthRepository extends BaseRepository {
-  async loginUser(credentials: {username: string, password: string}): Promise<{ success: boolean, code: number, message: string, data?: Record<string, any> }> {
+  /**
+   * Logs in user using Parse endpoint
+   * @param   {LoginCredentials} credentials
+   * @returns {RepositoryResponse}
+   */
+  @catchAxiosError()
+  async loginUser(credentials: LoginCredentials): Promise<RepositoryResponse<any>> {
     const response = await this.login(credentials);
     if (response.status === 200) {
       return {
