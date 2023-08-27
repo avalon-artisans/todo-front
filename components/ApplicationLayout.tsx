@@ -124,7 +124,7 @@ export default function ApplicationLayout(props: ApplicationLayoutProps) {
               <SpeedDialHandler>
                 <IconButton
                   size="lg"
-                  className="rounded-full"
+                  className="rounded-full z-50"
                   onClick={() => router.push('/todo/new')}
                 >
                   <PlusIcon className="h-5 w-5 transition-transform group-hover:rotate-45" />
