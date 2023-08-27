@@ -12,11 +12,12 @@ export default class TodoService {
   /**
    * Fetch specific todo
    * @param   {string} objectId
+   * @param   {any}    headers
    * @returns {Promise<ServiceResponse<TodoItem>>}
    */
   @catchServiceError<TodoItem>()
-  async fetchSpecificTodo(objectId: string): Promise<ServiceResponse<TodoItem>> {
-    const apiResponse = await this.requestFetchSpecificTodo(objectId);
+  async fetchSpecificTodo(objectId: string, headers: any = {}): Promise<ServiceResponse<TodoItem>> {
+    const apiResponse = await this.requestFetchSpecificTodo(objectId, headers);
     if (apiResponse.status !== HttpStatusCode.Ok) {
       const errorResponse = apiResponse as AxiosResponse<ErrorResponseData>;
       return {
@@ -112,12 +113,14 @@ export default class TodoService {
   /**
    * Requests fetching specific todo
    * @param objectId
+   * @param {any} headers
    */
-  async requestFetchSpecificTodo(objectId: string): Promise<AxiosResponse<SuccessResponseData|ErrorResponseData>> {
+  async requestFetchSpecificTodo(objectId: string, headers: any = {}): Promise<AxiosResponse<SuccessResponseData|ErrorResponseData>> {
     return axios({
       method: 'GET',
       url: `${process.env.APP_DOMAIN as string}/api/todo/${objectId}`,
       headers: {
+        ...headers,
         'Content-Type': 'application/json',
       }
     });

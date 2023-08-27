@@ -16,12 +16,11 @@ export default withIronSessionApiRoute(
  */
 async function handler(request: NextApiRequest, response: NextApiResponse<SuccessResponseData|ErrorResponseData>) {
   const requestMethod = request.method;
-  const { user } = request.session;
+  const { user } = await request.session;
   const { objectId } = request.query;
-  console.log(user);
 
   if (!isRequestMethodValid(requestMethod)) {
-    response
+    return response
       .status(HttpStatusCode.NotFound)
       .json({
         errors: {
@@ -29,11 +28,10 @@ async function handler(request: NextApiRequest, response: NextApiResponse<Succes
           detail: 'HTTP method not supported.',
         },
       });
-    return;
   }
 
   if (!objectId) {
-    response
+    return response
       .status(HttpStatusCode.NotFound)
       .json({
         errors: {
@@ -41,7 +39,6 @@ async function handler(request: NextApiRequest, response: NextApiResponse<Succes
           detail: 'Invalid object ID.',
         },
       });
-    return;
   }
 
   if (!user) {

@@ -1,10 +1,10 @@
 import { useRouter } from 'next/router';
-import {withSessionSsr} from "@/providers/auth/iron-session-config.provider";
-import ApplicationLayout from "@/components/ApplicationLayout";
-import {UserSession} from "@/types/auth";
-import TodoService from "@/services/todo.service";
-import {TodoItem} from "@/types/todo";
-import {useEffect} from "react";
+import {withSessionSsr} from '@/providers/auth/iron-session-config.provider';
+import ApplicationLayout from '@/components/ApplicationLayout';
+import { UserSession } from '@/types/auth';
+import TodoService from '@/services/todo.service';
+import { TodoItem } from '@/types/todo';
+import TodoItemComponent from "@/components/todo/TodoItemComponent";
 
 interface SpecificTodoProps {
   user?: UserSession;
@@ -14,16 +14,10 @@ interface SpecificTodoProps {
 export default function TodoItem(props: SpecificTodoProps) {
   const router = useRouter();
 
-  useEffect(() => {
-    if (!props.todo) {
-      router.push('/dashboard');
-    }
-  }, [props.todo]);
-
   return (
     <>
       <ApplicationLayout user={props.user}>
-        <></>
+        <TodoItemComponent todo={props.todo} />
       </ApplicationLayout>
     </>
   );
@@ -32,18 +26,32 @@ export default function TodoItem(props: SpecificTodoProps) {
 export const getServerSideProps = withSessionSsr(
   async function getServerSideProps({ req, query }) {
     const { objectId } = query;
+    const headers = req.headers;
+
     if (!objectId || objectId.length === 0) {
       return {
-        props: { user: req.session.user }
+        props: {
+          redirect: {
+            url: '/dashboard',
+            permanent: true,
+          },
+          user: req.session.user
+        }
       };
     }
 
     const todoService = new TodoService();
-    const response = await todoService.fetchSpecificTodo(objectId as string);
+    const response = await todoService.fetchSpecificTodo(objectId as string, headers);
 
     if (!response.success) {
       return {
-        props: { user: req.session.user }
+        props: {
+          redirect: {
+            url: '/dashboard',
+            permanent: true,
+          },
+          user: req.session.user
+        }
       };
     }
 
