@@ -12,6 +12,7 @@ export function catchServiceError<T>() {
         return {
           success: false,
           message: (error as Error).message,
+          stack: (error as Error).stack,
         };
       }
     }

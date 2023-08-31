@@ -4,7 +4,7 @@ import ApplicationLayout from '@/components/ApplicationLayout';
 import { UserSession } from '@/types/auth';
 import TodoService from '@/services/todo.service';
 import { TodoItem } from '@/types/todo';
-import TodoItemComponent from "@/components/todo/TodoItemComponent";
+import ShowTodoItem from '@/components/todo/ShowTodoItem';
 
 interface SpecificTodoProps {
   user?: UserSession;
@@ -17,7 +17,7 @@ export default function TodoItem(props: SpecificTodoProps) {
   return (
     <>
       <ApplicationLayout user={props.user}>
-        <TodoItemComponent todo={props.todo} />
+        <ShowTodoItem todo={props.todo} />
       </ApplicationLayout>
     </>
   );

@@ -1,101 +1,48 @@
-import {useEffect, useState} from 'react';
-import TodoService from '@/services/todo.service';
-import {TodoItem, TodoStatus} from '@/types/todo';
+import {TodoItem} from '@/types/todo';
 import {Typography} from '@material-tailwind/react';
-import TodoList from '@/components/dashboard/TodoList';
-import {useDispatch} from 'react-redux';
-import {changeAlertColor, changeAlertVisibility, changeMessage} from "@/store/slices/alertSlice";
-import _ from 'lodash';
+import TodoList from '@/components/todo/TodoList';
+import CompletedTodosFilter from '@/filters/todo/completed-todos.filter';
+import DueTodayTodosFilter from '@/filters/todo/due-today-todos.filter';
+import OverdueTodosFilter from '@/filters/todo/overdue-todos.filter';
+import UpcomingTodosFilter from '@/filters/todo/upcoming-todos.filter';
+import NoDueTodosFilter from '@/filters/todo/no-due-todos.filter';
 import dayjs from 'dayjs';
 
 import utc from 'dayjs/plugin/utc';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
-import {ServiceResponse} from "@/types";
 
 dayjs.extend(utc);
 dayjs.extend(customParseFormat);
+
+interface DashboardProps {
+  todos?: TodoItem[];
+}
 
 /**
  * Dashboard component
  * @author Kenneth Sumang
  */
-export default function Dashboard() {
-  const [todoItems, setTodoItems] = useState<TodoItem[]>([]);
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    fetchTodos()
-      .then((data) => {
-        if (!data.success) {
-          dispatch(changeMessage(data.message));
-          dispatch(changeAlertColor('red'));
-          dispatch(changeAlertVisibility(true));
-          return;
-        }
-
-        setTodoItems(data.data as TodoItem[]);
-      })
-      .catch(() => {
-        dispatch(changeMessage('A server error has occurred.'));
-        dispatch(changeAlertColor('red'));
-        dispatch(changeAlertVisibility(true));
-      })
-  }, []);
-
-  /**
-   * Fetch todos
-   * @returns {Promise<Object[]>}
-   */
-  async function fetchTodos(): Promise<ServiceResponse<TodoItem[]>> {
-    const todoService = new TodoService();
-    return todoService.fetchTodos();
-  }
+export default function Dashboard(props: DashboardProps) {
+  const todoItems = props.todos;
 
   function filterItemsDone(): TodoItem[] {
-    return _.filter(todoItems, (item) => {
-      return item.status === TodoStatus.DONE;
-    });
+    return new CompletedTodosFilter().applyFilter(todoItems as TodoItem[]);
   }
 
   function filterItemsDueToday(): TodoItem[] {
-    return _.filter(todoItems, (item) => {
-      if (item.due_date && item.due_date.length > 0) {
-        return item.due_date!.includes(dayjs().utc().format('YYYY-MM-DD')) && item.status !== TodoStatus.DONE;
-      }
-      return false;
-    });
+    return new DueTodayTodosFilter().applyFilter(todoItems as TodoItem[]);
   }
 
   function filterItemsOverdue(): TodoItem[] {
-    return _.filter(todoItems, (item) => {
-      if (!item.due_date || item.due_date.length === 0) {
-        return false;
-      }
-
-      const dueDate = dayjs(item.due_date, 'YYYY-MM-DD HH:mm:ss');
-      const timeNow = dayjs();
-
-      return timeNow.isAfter(dueDate) && item.status !== TodoStatus.DONE;
-    });
+    return new OverdueTodosFilter().applyFilter(todoItems as TodoItem[]);
   }
 
   function filterItemsUpcoming(): TodoItem[] {
-    return _.filter(todoItems, (item) => {
-      if (!item.due_date || item.due_date.length === 0) {
-        return false;
-      }
-
-      const dueDate = dayjs(item.due_date, 'YYYY-MM-DD HH:mm:ss');
-      const timeNow = dayjs();
-
-      return timeNow.isBefore(dueDate) && item.status !== TodoStatus.DONE;
-    });
+    return new UpcomingTodosFilter().applyFilter(todoItems as TodoItem[]);
   }
 
   function filterNoDue(): TodoItem[] {
-    return _.filter(todoItems, (item) => {
-      return (!item.due_date || item.due_date.length === 0) && item.status !== TodoStatus.DONE;
-    });
+    return new NoDueTodosFilter().applyFilter(todoItems as TodoItem[]);
   }
 
   const itemGroups: Record<string, TodoItem[]> = {

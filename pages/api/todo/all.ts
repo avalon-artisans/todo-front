@@ -15,7 +15,6 @@ export default withIronSessionApiRoute(
  * Register API route
  */
 async function handler(request: NextApiRequest, response: NextApiResponse<SuccessResponseData|ErrorResponseData>) {
-  const requestBody = request.body;
   const requestMethod = request.method;
   const { user } = request.session;
 

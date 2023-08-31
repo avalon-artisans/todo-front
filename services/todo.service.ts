@@ -36,11 +36,12 @@ export default class TodoService {
 
   /**
    * Fetches todos
+   * @param   {any} headers
    * @returns {Promise<ServiceResponse<TodoItem[]>>}
    */
   @catchServiceError<TodoItem[]>()
-  async fetchTodos(): Promise<ServiceResponse<TodoItem[]>> {
-    const response = await this.requestFetchAllTodos();
+  async fetchTodos(headers: any): Promise<ServiceResponse<TodoItem[]>> {
+    const response = await this.requestFetchAllTodos(headers);
     if (response.status !== HttpStatusCode.Ok) {
       const errorResponse = response as AxiosResponse<ErrorResponseData>;
       return {
@@ -130,11 +131,12 @@ export default class TodoService {
    * Requests fetching of todos in API
    * @returns {Promise<AxiosResponse<SuccessResponseData|ErrorResponseData>>}
    */
-  async requestFetchAllTodos(): Promise<AxiosResponse<SuccessResponseData|ErrorResponseData>> {
+  async requestFetchAllTodos(headers: any): Promise<AxiosResponse<SuccessResponseData|ErrorResponseData>> {
     return axios({
       method: 'GET',
-      url: '/api/todo/all',
+      url: `${process.env.APP_DOMAIN as string}/api/todo/all`,
       headers: {
+        ...headers,
         'Content-Type': 'application/json',
       }
     });

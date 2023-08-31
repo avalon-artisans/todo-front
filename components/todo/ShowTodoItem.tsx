@@ -5,7 +5,7 @@ import dayjs, {Dayjs} from "dayjs";
 interface TodoItemProps {
   todo?: TodoItem;
 }
-export default function TodoItemComponent(props: TodoItemProps) {
+export default function ShowTodoItem(props: TodoItemProps) {
   let formattedDueDate: string|null = null;
   if (props.todo?.due_date && props.todo?.due_date.length !== 0) {
     formattedDueDate = dayjs(props.todo?.due_date, 'YYYY-MM-DD HH:mm:ss').format('dddd, MMMM D, YYYY h:mm A');

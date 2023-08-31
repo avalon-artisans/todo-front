@@ -39,6 +39,7 @@ interface ServiceResponse<T> {
   success: boolean;
   message: string;
   data?: T;
+  stack?: any;
 }
 
 export type {
