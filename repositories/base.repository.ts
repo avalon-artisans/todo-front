@@ -95,4 +95,18 @@ export default class BaseRepository {
       headers: requestParams.headers,
     });
   }
+
+  /**
+   * Updates specific objectId in given class
+   * @param   {string}              objectId
+   * @param   {Record<string, any>} data
+   * @param   {string?}             sessionToken
+   * @returns {Promise<any>}
+   */
+  async put(objectId: string, data: Record<string, any>, sessionToken?: string): Promise<any> {
+    const requestParams = this.prepareRequestParams(sessionToken, objectId);
+    return axios.get(requestParams.url, {
+      headers: requestParams.headers,
+    });
+  }
 }

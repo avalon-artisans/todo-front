@@ -37,32 +37,33 @@ async function handler(request: NextApiRequest, response: NextApiResponse) {
       });
   }
 
+  const validationResponse = checkObjectIdInForm(requestBody);
+  if (!validationResponse) {
+    return response
+      .status(400)
+      .json({
+        errors: {
+          title: 'Bad Request',
+          detail: 'Object ID is invalid.',
+        }
+      });
+  }
+
   if (requestBody.due_date && requestBody.due_date.length > 0) {
     requestBody.due_date = convertDateStringToUtc(requestBody.due_date, requestBody.timezone);
   }
   delete requestBody.timezone;
 
+  const { objectId, ...formData } = requestBody;
   const todoRepository = new TodoRepository();
-  const apiResponse = await todoRepository.create({
-    ...requestBody,
-    'ACL': {
-      'public': {
-        read: false,
-        write: false,
-      },
-      [user.objectId]: {
-        read: true,
-        write: true,
-      }
-    },
-  }, user.sessionToken);
+  const apiResponse = await todoRepository.update(objectId, formData, user.sessionToken);
 
   if (!apiResponse.success) {
     return response
       .status(apiResponse.code)
       .json({
         errors: {
-          title: 'Failed creating todo.',
+          title: 'Failed updating todo.',
           detail: apiResponse.message,
         },
       });
@@ -82,4 +83,13 @@ function isValidPostRequest(requestMethod: string|undefined): boolean {
   }
 
   return requestMethod.toUpperCase() === 'POST';
+}
+
+/**
+ * Checks object id if present in form
+ * @param   {Record<string, any>} formData
+ * @returns {boolean}
+ */
+function checkObjectIdInForm(formData: Record<string, any>): boolean {
+  return formData.objectId && formData.objectId.length > 0;
 }

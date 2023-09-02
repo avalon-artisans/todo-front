@@ -81,4 +81,29 @@ export default class TodoRepository extends BaseRepository {
       message: response.message,
     };
   }
+
+  /**
+   * Updates a specific todo
+   * @param   {string}              objectId
+   * @param   {Record<string, any>} formData
+   * @param   {string?}             sessionToken
+   * @returns {Promise<RepositoryResponse<any>>}
+   */
+  async update(objectId: string, formData: Record<string, any>, sessionToken?: string): Promise<RepositoryResponse<any>> {
+    const response = await this.put(objectId, formData, sessionToken);
+    if (response.statusCode === 201) {
+      return {
+        success: true,
+        code: 201,
+        message: 'Successfully updated.',
+        data: response.data,
+      };
+    }
+
+    return {
+      success: false,
+      code: response.status,
+      message: response.message,
+    };
+  }
 }
