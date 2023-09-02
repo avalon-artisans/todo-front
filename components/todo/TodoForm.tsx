@@ -34,9 +34,8 @@ export default function TodoForm(props: TodoFormProps) {
       });
 
       if (response.success) {
-        dispatch(changeMessage('Todo created successfully!'));
-        dispatch(changeAlertVisibility(true));
-        dispatch(changeAlertColor('green'));
+        resetForm();
+        await router.push('/dashboard');
         return;
       }
 
@@ -50,6 +49,12 @@ export default function TodoForm(props: TodoFormProps) {
       dispatch(changeAlertVisibility(true));
       dispatch(changeAlertColor('red'));
     }
+  }
+
+  function resetForm() {
+    setTitle('');
+    setDue('');
+    setDescription('');
   }
 
   return (
