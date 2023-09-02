@@ -12,7 +12,7 @@ export default function NewTodo(props: NewTodoProps) {
     <>
       <div className="w-screen">
         <ApplicationLayout user={props.user}>
-          <TodoForm />
+          <TodoForm timezone={(props.user as UserSession).timezone}/>
         </ApplicationLayout>
       </div>
     </>

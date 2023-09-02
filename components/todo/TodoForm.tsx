@@ -7,7 +7,11 @@ import { useDispatch } from 'react-redux';
 import { changeAlertColor, changeAlertVisibility, changeMessage } from '@/store/slices/alertSlice';
 import dayjs from 'dayjs';
 
-export default function TodoForm() {
+interface TodoFormProps {
+  timezone: string;
+}
+
+export default function TodoForm(props: TodoFormProps) {
   const router = useRouter();
   const dispatch = useDispatch();
   const [ title, setTitle ] = useState('');
@@ -26,6 +30,7 @@ export default function TodoForm() {
         title: title,
         description: description,
         due_date: dayjs(due).format('YYYY-MM-DD HH:mm:ss'),
+        timezone: props.timezone,
       });
 
       if (response.success) {

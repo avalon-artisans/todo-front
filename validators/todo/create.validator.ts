@@ -18,6 +18,6 @@ export default class CreateTodoValidator extends BaseValidator {
       .string()
       .regex(/^\d{4}-(1[0-2]|0[0-9])-[0-3]\d\s([0-1][0-9]|2[0-3]):[0-5]\d:[0-5]\d$/)
       .allow(null, '')
-      .optional()
+      .optional(),
   });
 }
