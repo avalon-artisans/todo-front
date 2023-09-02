@@ -3,7 +3,6 @@ import type { UserSession } from '@/types/auth';
 import { withIronSessionApiRoute, withIronSessionSsr } from 'iron-session/next';
 import {
   GetServerSidePropsContext,
-  GetServerSidePropsResult,
   NextApiHandler,
 } from 'next';
 
@@ -15,6 +14,7 @@ export const sessionOptions: IronSessionOptions = {
   cookieName: process.env.SESSION_COOKIE_NAME as string,
   cookieOptions: {
     secure: process.env.NODE_ENV === 'production',
+    maxAge: parseInt(process.env.MAX_AGE as string, 10) || 28800,
   },
 };
 
