@@ -7,7 +7,7 @@ export default class DueTodayTodosFilter<T extends TodoItem> extends BaseFilter<
   applyFilter(items: T[], options?: Record<string, any>): T[] {
     return _.filter(items, (item) => {
       if (item.due_date && item.due_date.length > 0) {
-        return item.due_date!.includes(dayjs().utc().format('YYYY-MM-DD')) && item.status !== TodoStatus.DONE;
+        return item.due_date!.includes(dayjs().format('YYYY-MM-DD')) && item.status !== TodoStatus.DONE;
       }
       return false;
     });
