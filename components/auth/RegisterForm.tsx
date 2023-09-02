@@ -43,6 +43,7 @@ export default function RegisterForm() {
         dispatch(changeMessage('Registered successfully. Please login to continue.'));
         dispatch(changeAlertVisibility(true));
         dispatch(changeAlertColor('green'));
+        router.push('/');
         return;
       }
 
