@@ -16,6 +16,7 @@ interface UserLoginData {
   objectId: string;
   sessionToken: string;
   ACL: Record<string, object>;
+  timezone: string;
 }
 
 /**
