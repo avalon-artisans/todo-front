@@ -17,6 +17,7 @@ interface UserSession {
   createdAt: string;
   updatedAt: string;
   ACL: Record<string, object>;
+  timezone: string;
 }
 
 export type {

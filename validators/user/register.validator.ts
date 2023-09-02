@@ -74,5 +74,8 @@ export default class RegisterValidator extends BaseValidator {
         'any.equal': 'Passwords do not match.',
         'any.only': 'Passwords do not match.',
       }),
+    timezone: Joi
+      .string()
+      .required(),
   });
 }

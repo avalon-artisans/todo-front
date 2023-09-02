@@ -5,6 +5,7 @@ import { ArrowLeftIcon } from '@heroicons/react/24/solid';
 import UserService from '@/services/user.service';
 import { useDispatch } from 'react-redux';
 import { changeAlertColor, changeAlertVisibility, changeMessage } from '@/store/slices/alertSlice';
+import { guessUserTimezone } from '@/libraries/date.library';
 
 /**
  * RegisterForm component
@@ -34,7 +35,8 @@ export default function RegisterForm() {
         username: username,
         email: email,
         password: password,
-        retypePassword: retypePassword
+        retypePassword: retypePassword,
+        timezone: guessUserTimezone(),
       });
 
       if (response.success) {

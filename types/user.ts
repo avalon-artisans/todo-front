@@ -7,6 +7,7 @@ interface RegisterFormData {
   email: string;
   password: string;
   retypePassword: string;
+  timezone: string;
 }
 
 export type {
