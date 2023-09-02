@@ -20,3 +20,8 @@ export function convertDateStringToUtc(date: string, srcTimezone: string): strin
   const dateWithLocalTz = dayjs.tz(date, defaultDatetimeFormat, srcTimezone);
   return dateWithLocalTz.utc().format(defaultDatetimeFormat);
 }
+
+export function convertUtcToLocalTz(date: string, destTimezone: string): string {
+  const dateInUtc = dayjs.utc(date, defaultDatetimeFormat);
+  return dateInUtc.tz(destTimezone).format(defaultDatetimeFormat);
+}

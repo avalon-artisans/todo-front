@@ -3,6 +3,8 @@ import type { ErrorResponseData, SuccessResponseData } from '@/types';
 import { HttpStatusCode } from 'axios';
 import TodoRepository from '@/repositories/todo.repository';
 import {sessionOptions} from '@/providers/auth/iron-session-config.provider';
+import {convertUtcToLocalTz} from '@/libraries/date.library';
+import _ from 'lodash';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import type { TodoItem } from '@/types/todo';
 
@@ -55,7 +57,8 @@ async function handler(request: NextApiRequest, response: NextApiResponse<Succes
       });
   }
 
-  const responseData = apiResponse.data as TodoItem[];
+  let responseData = apiResponse.data as TodoItem[];
+  responseData = convertToUserTz(responseData, user.timezone);
   return response
     .status(200)
     .json({
@@ -70,4 +73,13 @@ async function handler(request: NextApiRequest, response: NextApiResponse<Succes
  */
 function isRequestMethodValid(requestMethod: string|undefined): boolean {
   return requestMethod === 'GET';
+}
+
+function convertToUserTz(items: TodoItem[], userTz: string): TodoItem[] {
+  return _.map(items, (item: TodoItem) => {
+    if (item.due_date && item.due_date.length > 0) {
+      item.due_date = convertUtcToLocalTz(item.due_date, userTz);
+    }
+    return item;
+  });
 }

@@ -5,6 +5,7 @@ import TodoRepository from '@/repositories/todo.repository';
 import {sessionOptions} from '@/providers/auth/iron-session-config.provider';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import type { TodoItem } from '@/types/todo';
+import {convertUtcToLocalTz} from "@/libraries/date.library";
 
 export default withIronSessionApiRoute(
   handler,
@@ -67,6 +68,9 @@ async function handler(request: NextApiRequest, response: NextApiResponse<Succes
   }
 
   const responseData = apiResponse.data as TodoItem;
+  if (responseData.due_date && responseData.due_date.length > 0) {
+    responseData.due_date = convertUtcToLocalTz(responseData.due_date, user.timezone);
+  }
   return response
     .status(200)
     .json({
