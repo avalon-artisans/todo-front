@@ -3,7 +3,6 @@ import axios, {AxiosResponse, HttpStatusCode} from 'axios';
 import {ErrorResponseData, ServiceResponse, SuccessResponseData} from '@/types';
 import CreateTodoValidator from '@/validators/todo/create.validator';
 import { catchServiceError } from '@/decorators/catch-error.decorator';
-import {convertDateStringToUtc} from "@/libraries/date.library";
 
 /**
  * TodoService class
@@ -67,20 +66,12 @@ export default class TodoService {
    */
   @catchServiceError<TodoItem>()
   async processCreateTodo(formData: Record<string, any>): Promise<ServiceResponse<TodoItem>> {
-    // get timezone first before validating.
-    const timezone = formData.timezone;
-    delete formData.timezone;
-
     const validationResponse = this.validateFormData(formData);
     if (!validationResponse.success) {
       return {
         success: false,
         message: validationResponse.message
       }
-    }
-
-    if (formData.due_date && formData.due_date.length > 0) {
-      formData.due_date = convertDateStringToUtc(formData.due_date, timezone);
     }
 
     const data = formData as TodoFormData;

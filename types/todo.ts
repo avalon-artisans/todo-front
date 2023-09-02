@@ -23,6 +23,7 @@ interface TodoFormData {
   title: string;
   description?: string|null;
   due_date?: string|null;
+  timezone: string;
 }
 
 export type { TodoItem, TodoFormData };

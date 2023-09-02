@@ -3,6 +3,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { sessionOptions } from '@/providers/auth/iron-session-config.provider';
 import TodoRepository from '@/repositories/todo.repository';
 import type { TodoItem } from '@/types/todo';
+import {convertDateStringToUtc} from "@/libraries/date.library";
 
 export default withIronSessionApiRoute(
   handler,
@@ -35,6 +36,11 @@ async function handler(request: NextApiRequest, response: NextApiResponse) {
         }
       });
   }
+
+  if (requestBody.due_date && requestBody.due_date.length > 0) {
+    requestBody.due_date = convertDateStringToUtc(requestBody.due_date, requestBody.timezone);
+  }
+  delete requestBody.timezone;
 
   const todoRepository = new TodoRepository();
   const apiResponse = await todoRepository.create({
