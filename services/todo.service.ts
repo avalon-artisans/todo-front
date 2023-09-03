@@ -35,6 +35,22 @@ export default class TodoService {
   }
 
   /**
+   * Requests fetching specific todo
+   * @param objectId
+   * @param {any} headers
+   */
+  async requestFetchSpecificTodo(objectId: string, headers: any = {}): Promise<AxiosResponse<SuccessResponseData|ErrorResponseData>> {
+    return axios({
+      method: 'GET',
+      url: `${process.env.APP_DOMAIN as string}/api/todo/${objectId}`,
+      headers: {
+        ...headers,
+        'Content-Type': 'application/json',
+      }
+    });
+  }
+
+  /**
    * Fetches todos
    * @param   {any} headers
    * @returns {Promise<ServiceResponse<TodoItem[]>>}
@@ -57,6 +73,21 @@ export default class TodoService {
       message: 'Fetch successful.',
       data: successResponse.data.data,
     };
+  }
+
+  /**
+   * Requests fetching of todos in API
+   * @returns {Promise<AxiosResponse<SuccessResponseData|ErrorResponseData>>}
+   */
+  async requestFetchAllTodos(headers: any): Promise<AxiosResponse<SuccessResponseData|ErrorResponseData>> {
+    return axios({
+      method: 'GET',
+      url: `${process.env.APP_DOMAIN as string}/api/todo/all`,
+      headers: {
+        ...headers,
+        'Content-Type': 'application/json',
+      }
+    });
   }
 
   /**
@@ -109,37 +140,6 @@ export default class TodoService {
     }
 
     return { success: true, message: '' };
-  }
-
-  /**
-   * Requests fetching specific todo
-   * @param objectId
-   * @param {any} headers
-   */
-  async requestFetchSpecificTodo(objectId: string, headers: any = {}): Promise<AxiosResponse<SuccessResponseData|ErrorResponseData>> {
-    return axios({
-      method: 'GET',
-      url: `${process.env.APP_DOMAIN as string}/api/todo/${objectId}`,
-      headers: {
-        ...headers,
-        'Content-Type': 'application/json',
-      }
-    });
-  }
-
-  /**
-   * Requests fetching of todos in API
-   * @returns {Promise<AxiosResponse<SuccessResponseData|ErrorResponseData>>}
-   */
-  async requestFetchAllTodos(headers: any): Promise<AxiosResponse<SuccessResponseData|ErrorResponseData>> {
-    return axios({
-      method: 'GET',
-      url: `${process.env.APP_DOMAIN as string}/api/todo/all`,
-      headers: {
-        ...headers,
-        'Content-Type': 'application/json',
-      }
-    });
   }
 
   /**
