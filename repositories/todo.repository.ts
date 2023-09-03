@@ -41,7 +41,7 @@ export default class TodoRepository extends BaseRepository {
    */
   @catchAxiosError()
   async fetchAllTodos(sessionToken?: string): Promise<RepositoryResponse<any>> {
-    const response = await this.fetchAll(sessionToken);
+    const response = await this.fetchAll(sessionToken, { order: '-due_date' });
     if (response.status === 200) {
       return {
         success: true,

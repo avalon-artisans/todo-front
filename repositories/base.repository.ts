@@ -17,10 +17,17 @@ export default class BaseRepository {
     this.restApiKey = parseServerConfig.restApiKey;
   }
 
-  prepareRequestParams(sessionToken?: string, objectId?: string): { url: string; headers: Record<string, string> } {
+  prepareRequestParams(sessionToken?: string, objectId?: string, params?: Record<string, any>): { url: string; headers: Record<string, string> } {
     let url = this.serverUrl + '/classes/' + this.class;
-    if (objectId) {
+    if (objectId && objectId.length > 0) {
       url += `/${objectId}`;
+    }
+
+    if (params) {
+      url += '?';
+      Object.keys(params).map((key) => {
+        url += key + '=' + encodeURI(params[key]);
+      });
     }
 
     const headers: Record<string, string> = {
@@ -74,10 +81,11 @@ export default class BaseRepository {
   /**
    * Fetches all in given class
    * @param   {string} sessionToken
+   * @param   {Record<string, any>} params
    * @returns {Promise<any>}
    */
-  async fetchAll(sessionToken?: string): Promise<any> {
-    const requestParams = this.prepareRequestParams(sessionToken);
+  async fetchAll(sessionToken?: string, params?: Record<string, any>): Promise<any> {
+    const requestParams = this.prepareRequestParams(sessionToken, undefined, params);
     return axios.get(requestParams.url, {
       headers: requestParams.headers,
     });

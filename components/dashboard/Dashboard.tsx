@@ -10,6 +10,7 @@ import dayjs from 'dayjs';
 
 import utc from 'dayjs/plugin/utc';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
+import NotStartedTodosFilter from "@/filters/todo/not-started-todos.filter";
 
 dayjs.extend(utc);
 dayjs.extend(customParseFormat);
@@ -29,29 +30,15 @@ export default function Dashboard(props: DashboardProps) {
     return new CompletedTodosFilter().applyFilter(todoItems as TodoItem[]);
   }
 
-  function filterItemsDueToday(): TodoItem[] {
-    return new DueTodayTodosFilter().applyFilter(todoItems as TodoItem[]);
-  }
-
-  function filterItemsOverdue(): TodoItem[] {
-    return new OverdueTodosFilter().applyFilter(todoItems as TodoItem[]);
-  }
-
-  function filterItemsUpcoming(): TodoItem[] {
-    return new UpcomingTodosFilter().applyFilter(todoItems as TodoItem[]);
-  }
-
-  function filterNoDue(): TodoItem[] {
-    return new NoDueTodosFilter().applyFilter(todoItems as TodoItem[]);
+  function filterItemsTodo(): TodoItem[] {
+    return new NotStartedTodosFilter().applyFilter(todoItems as TodoItem[]);
   }
 
   const itemGroups: Record<string, TodoItem[]> = {
     'Done': filterItemsDone(),
-    'Overdue': filterItemsOverdue(),
-    'Today': filterItemsDueToday(),
-    'Upcoming': filterItemsUpcoming(),
-    'No Due Date': filterNoDue(),
+    'Todo': filterItemsTodo(),
   };
+
   return (
     <>
       {
