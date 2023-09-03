@@ -1,8 +1,8 @@
-import {TodoFormData, TodoItem} from '@/types/todo';
+import {TodoFormData, TodoItem, TodoStatus} from '@/types/todo';
 import axios, {AxiosResponse, HttpStatusCode} from 'axios';
 import {ErrorResponseData, ServiceResponse, SuccessResponseData} from '@/types';
 import CreateTodoValidator from '@/validators/todo/create.validator';
-import { catchServiceError } from '@/decorators/catch-error.decorator';
+import {catchServiceError} from '@/decorators/catch-error.decorator';
 
 /**
  * TodoService class
@@ -158,4 +158,42 @@ export default class TodoService {
     });
   }
 
+  /**
+   * Requests for toggling todo status
+   * @param   {string}  objectId
+   * @param   {boolean} isChecked
+   * @returns {Promise<ServiceResponse<any>>}
+   */
+  async processTodoStatusToggle(objectId: string, isChecked: boolean): Promise<ServiceResponse<any>> {
+    const status = isChecked ? TodoStatus.DONE : TodoStatus.TODO;
+    const apiResponse = await this.requestUpdateTodo(objectId, { status });
+    if (apiResponse.status !== HttpStatusCode.Ok) {
+      const errorResponse = apiResponse as AxiosResponse<ErrorResponseData>;
+      return {
+        success: false,
+        message: errorResponse.data.errors.detail,
+      };
+    }
+
+    const successResponse = apiResponse as AxiosResponse<SuccessResponseData>;
+    return {
+      success: true,
+      message: 'Successfully updated todo.',
+      data: successResponse.data.data,
+    };
+  }
+
+  async requestUpdateTodo(objectId: string, data: Record<string, any>): Promise<AxiosResponse<SuccessResponseData|ErrorResponseData>> {
+    return axios({
+      method: 'POST',
+      url: '/api/todo/update',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      data: {
+        objectId: objectId,
+        ...data,
+      },
+    });
+  }
 }

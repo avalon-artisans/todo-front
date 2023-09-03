@@ -3,6 +3,8 @@ import { Card, CardBody, Checkbox, List, ListItem, ListItemPrefix } from '@mater
 import { formatDateToHumanReadable, isDateBeforeNow } from '@/libraries/date.library';
 import React from 'react';
 import { ExclamationCircleIcon } from "@heroicons/react/24/outline";
+import TodoService from "@/services/todo.service";
+import {useRouter} from "next/router";
 
 /**
  * TodoListProps structure
@@ -12,6 +14,8 @@ interface TodoListProps {
 }
 
 export default function TodoList({ items }: TodoListProps) {
+  const router = useRouter();
+
   function displayDueDateString(status: string, dueDate?: string|null): React.ReactNode {
     if (!dueDate || dueDate.length === 0) {
       return <small>No Due Date set.</small>
@@ -29,6 +33,17 @@ export default function TodoList({ items }: TodoListProps) {
     }
 
     return <small>{ humanReadableDate }</small>;
+  }
+
+  async function handleToggleTodoStatus(objectId: string, isChecked: boolean) {
+    const todoService = new TodoService();
+    const response = await todoService.processTodoStatusToggle(objectId, isChecked);
+    if (!response.success) {
+      console.error(response);
+    }
+
+    // re-trigger server-side props
+    router.replace(router.asPath);
   }
 
   return (
@@ -50,7 +65,7 @@ export default function TodoList({ items }: TodoListProps) {
                     <Checkbox
                       checked={todoItem.status === TodoStatus.DONE}
                       containerProps={{ className: 'p-0' }}
-                      onChange={() => {}}
+                      onChange={(e) => handleToggleTodoStatus(todoItem.objectId, e.target.checked)}
                     />
                   </ListItemPrefix>
                   <div className="flex flex-col">

@@ -89,12 +89,13 @@ export default class TodoRepository extends BaseRepository {
    * @param   {string?}             sessionToken
    * @returns {Promise<RepositoryResponse<any>>}
    */
+  @catchAxiosError()
   async update(objectId: string, formData: Record<string, any>, sessionToken?: string): Promise<RepositoryResponse<any>> {
     const response = await this.put(objectId, formData, sessionToken);
-    if (response.statusCode === 201) {
+    if (response.status === 200) {
       return {
         success: true,
-        code: 201,
+        code: 200,
         message: 'Successfully updated.',
         data: response.data,
       };

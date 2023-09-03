@@ -8,7 +8,7 @@ enum TodoStatus {
  * TodoItem structure
  */
 interface TodoItem {
-  objectId: number;
+  objectId: string;
   title: string;
   description?: string|null;
   status: TodoStatus;

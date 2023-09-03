@@ -113,7 +113,7 @@ export default class BaseRepository {
    */
   async put(objectId: string, data: Record<string, any>, sessionToken?: string): Promise<any> {
     const requestParams = this.prepareRequestParams(sessionToken, objectId);
-    return axios.get(requestParams.url, {
+    return axios.put(requestParams.url, data, {
       headers: requestParams.headers,
     });
   }
