@@ -1,6 +1,8 @@
 import { TodoItem, TodoStatus } from '@/types/todo';
-import {Card, CardBody, Checkbox, List, ListItem, ListItemPrefix} from '@material-tailwind/react';
-import {formatDateToHumanReadable} from "@/libraries/date.library";
+import { Card, CardBody, Checkbox, List, ListItem, ListItemPrefix } from '@material-tailwind/react';
+import { formatDateToHumanReadable, isDateBeforeNow } from '@/libraries/date.library';
+import React from 'react';
+import { ExclamationCircleIcon } from "@heroicons/react/24/outline";
 
 /**
  * TodoListProps structure
@@ -10,6 +12,25 @@ interface TodoListProps {
 }
 
 export default function TodoList({ items }: TodoListProps) {
+  function displayDueDateString(status: string, dueDate?: string|null): React.ReactNode {
+    if (!dueDate || dueDate.length === 0) {
+      return <small>No Due Date set.</small>
+    }
+
+    const humanReadableDate = formatDateToHumanReadable(dueDate as string);
+    if (isDateBeforeNow(dueDate as string) && status === TodoStatus.TODO) {
+      return (
+        <small className="flex flex-row text-red-800">
+          <ExclamationCircleIcon height="15" />
+          <p className="pt-0.5 pl-1">{ humanReadableDate }</p>
+
+        </small>
+      );
+    }
+
+    return <small>{ humanReadableDate }</small>;
+  }
+
   return (
     <List className="p-0">
       {
@@ -42,11 +63,7 @@ export default function TodoList({ items }: TodoListProps) {
                         : <small>No Description.</small>
                     }
                     <br />
-                    {
-                      (todoItem.due_date && todoItem.due_date.length !== 0)
-                        ? <small>{ formatDateToHumanReadable(todoItem.due_date) }</small>
-                        : <small>No due date set.</small>
-                    }
+                    { displayDueDateString(todoItem.status, todoItem.due_date) }
                   </div>
                 </CardBody>
               </Card>

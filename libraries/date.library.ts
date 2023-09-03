@@ -25,3 +25,7 @@ export function convertUtcToLocalTz(date: string, destTimezone: string): string 
   const dateInUtc = dayjs.utc(date, defaultDatetimeFormat);
   return dateInUtc.tz(destTimezone).format(defaultDatetimeFormat);
 }
+
+export function isDateBeforeNow(date: string): boolean {
+  return dayjs(date, defaultDatetimeFormat).isBefore(dayjs());
+}
