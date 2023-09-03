@@ -15,6 +15,7 @@ import {
   UserCircleIcon,
   PresentationChartBarIcon,
   PowerIcon,
+  PencilIcon
 } from '@heroicons/react/24/solid';
 import { PlusIcon } from '@heroicons/react/20/solid';
 import AuthService from '@/services/auth.service';
@@ -64,10 +65,58 @@ export default function ApplicationLayout(props: ApplicationLayoutProps) {
     },
   ];
 
+  /**
+   * Handles logout button click
+   */
   async function handleLogoutButtonClick() {
     const authService = new AuthService();
     await authService.processLogout();
     return router.push('/');
+  }
+
+  /**
+   * Displays fab icon depending on the current page
+   */
+  function displayFabIcon(): React.ReactNode {
+    // if on create form, don't display
+    if (routesWithoutCreateIcon.includes(router.pathname)) {
+      return <></>;
+    }
+
+    // if on show to-do details, show an update
+    if (router.pathname === '/todo/[objectId]') {
+      return (
+        <div className="absolute bottom-5 right-5">
+          <SpeedDial>
+            <SpeedDialHandler>
+              <IconButton
+                size="lg"
+                className="rounded-full z-50"
+                onClick={() => router.push('/todo/new')}
+              >
+                <PencilIcon className="h-5 w-5 transition-transform group-hover:rotate-45" />
+              </IconButton>
+            </SpeedDialHandler>
+          </SpeedDial>
+        </div>
+      );
+    }
+
+    return (
+      <div className="absolute bottom-5 right-5">
+        <SpeedDial>
+          <SpeedDialHandler>
+            <IconButton
+              size="lg"
+              className="rounded-full z-50"
+              onClick={() => router.push('/todo/new')}
+            >
+              <PlusIcon className="h-5 w-5 transition-transform group-hover:rotate-45" />
+            </IconButton>
+          </SpeedDialHandler>
+        </SpeedDial>
+      </div>
+    );
   }
 
   return (
@@ -116,23 +165,7 @@ export default function ApplicationLayout(props: ApplicationLayoutProps) {
           }
         </List>
       </Drawer>
-      {
-        (routesWithoutCreateIcon.includes(router.pathname))
-          ? <></>
-          : <div className="absolute bottom-5 right-5">
-            <SpeedDial>
-              <SpeedDialHandler>
-                <IconButton
-                  size="lg"
-                  className="rounded-full z-50"
-                  onClick={() => router.push('/todo/new')}
-                >
-                  <PlusIcon className="h-5 w-5 transition-transform group-hover:rotate-45" />
-                </IconButton>
-              </SpeedDialHandler>
-            </SpeedDial>
-          </div>
-      }
+      { displayFabIcon() }
 
       <div className="m-5">
         { props.children }
