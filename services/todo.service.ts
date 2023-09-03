@@ -164,7 +164,7 @@ export default class TodoService {
    * @param   {boolean} isChecked
    * @returns {Promise<ServiceResponse<any>>}
    */
-  async processTodoStatusToggle(objectId: string, isChecked: boolean): Promise<ServiceResponse<any>> {
+  async processTodoStatusToggle(objectId: string, isChecked: boolean): Promise<ServiceResponse<{ updatedAt: string }>> {
     const status = isChecked ? TodoStatus.DONE : TodoStatus.TODO;
     const apiResponse = await this.requestUpdateTodo(objectId, { status });
     if (apiResponse.status !== HttpStatusCode.Ok) {
@@ -183,6 +183,12 @@ export default class TodoService {
     };
   }
 
+  /**
+   * Requests update todo
+   * @param   {string} objectId
+   * @param   {Record<string, any>} data
+   * @returns {Promise<AxiosResponse<SuccessResponseData|ErrorResponseData>>}
+   */
   async requestUpdateTodo(objectId: string, data: Record<string, any>): Promise<AxiosResponse<SuccessResponseData|ErrorResponseData>> {
     return axios({
       method: 'POST',

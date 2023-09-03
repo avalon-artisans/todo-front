@@ -57,7 +57,6 @@ async function handler(request: NextApiRequest, response: NextApiResponse) {
   const { objectId, ...formData } = requestBody;
   const todoRepository = new TodoRepository();
   const apiResponse = await todoRepository.update(objectId, formData, user.sessionToken);
-  console.log(apiResponse);
 
   if (!apiResponse.success) {
     return response
